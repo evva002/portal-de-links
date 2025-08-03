@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />     
+      <title>Portal de Links</title>
+      <div class="linha"></div>
+      <div class="container-topo">
+        <div class="header">
+          <h1>Portal de Links</h1>
+          <select id="layoutSelect" onchange="setLayout(this.value)">
+            <option value="1"> Layout 1 </option>
+            <option value="2"> Layout 2 </option>
+            <option value="3"> Layout 3 </option>
+            <option value="4"> Layout 4 </option>
+          </select>
+        </div>
+      </div>
+      <div class="linha"></div>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+    body {
+      font-family: Arial, sans-serif;
+      margin: 20px;
+      background-color: #fdf6f6;
+      padding-bottom: 20px;
+    }
+    html, body {
+      height: 100%;
+      margin: 5px;
+    }
+    .header h1 {
+      font-size: 32px;
+      color: #012E40;
+    }
+    .container-topo {
+      background-color: #fddab875;
+      padding: 20px;
+      border-radius: 16px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+    .container-quadros {
+      background-color: #fddab875;
+      padding: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      min-height: calc(100vh - 280px);
+      box-sizing:border-box;
+    }
+    .linha {
+      height: 2px;
+      background-color: #2e2e2e;
+      margin: 10px 0;
+      width: 100%;
+    }
+    .header select {
+      appearance: none;
+      position: absolute;
+      right: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      padding: 10px 20px;
+      font-size: 14px;
+      border-radius: 10px;
+      border: none;
+      background-color: #3CA6A6;
+      color: #ffffff;
+      cursor: pointer;
+    }
+    .select-tema {
+      display: flex;
+      justify-content: right;
+      flex-wrap: wrap;
+      width: 100%;
+      margin-bottom: 10px;
+    }
+    .header {
+      position: relative;
+      text-align: center; 
+      margin-bottom: 20px;
+    }
+    .controls {
+      display: flex;
+      justify-content: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+    .import-label {
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      background-color: #3CA6A6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+    }
+    .import-label:hover {
+      background-color: #026773;
+    }
+    .board-container {
+      margin: 10px 0px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 20px;
+      min-height: 100px;
+      box-sizing: border-box;
+    }
+    .board {
+      display: flex;
+      flex-direction: column;
+      border: 1px solid #3CA6A6;
+      border-radius: 10px;
+      padding: 10px;
+      background-color: #fff7a3;
+      color: #3CA6A6;
+      height: 500px;
+    }
+    
+    .board h3 {
+      font-size: 14px;
+      background-color: #3CA6A6;
+      color: white;
+      margin-right: 5px;
+      border-radius: 4px;
+      padding: 4px;
+      margin-left: -10px;
+    }
+
+    .board h2[contenteditable] {
+      outline: none;
+      padding: 4px;
+      background-color: #3CA6A6;
+      color: white;
+      border-radius: 4px;
+      margin-top: 4px;
+    }
+    .board ul {
+      flex-grow: 1;
+      overflow-y: auto;
+      padding-left: 20px;
+      min-height: 80px;
+    }
+    .board li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 5px;
+      gap: 10px;
+    }
+    .board a {
+      color: #026773;
+      text-decoration: none;
+      flex-grow: 1;
+    }
+    .board a:hover {
+      text-decoration: underline;
+    }
+    .add-board {
+      padding: 10px 20px;
+      font-size: 14px;
+      cursor: pointer;
+      background-color: #3CA6A6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+    }
+    .add-board:hover {
+      background-color: #026773;
+    }
+    .board-buttons {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 10px;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 5px;
+    }
+    .delete-link, .delete-board {
+      background-color: #bbbbbb;
+      color: white;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      border: none;
+      border-radius: 10px;
+      
+    }
+    .delete-link {
+      margin-right: 10px;
+    }
+    .delete-link:hover, .delete-board:hover {
+      background-color: #c9302c;
+    }
+    .add-link-btn, .open-all-btn{
+      font-size: 12px; 
+      cursor: pointer;
+      background-color: #3CA6A6;
+      color: white;
+      border: none;
+      border-radius: 10px;
+      padding: 6px 12px;
+    }
+    .add-link-btn:hover, .open-all-btn:hover{
+      background-color: #026773;
+    }
+    .edit-link {
+      background-color: #bbbbbb;
+      color: white;
+      padding: 6px 12px;
+      cursor: pointer;
+      font-size: 12px;
+      border: none;
+      border-radius: 10px;
+    }
+
+    .edit-link:hover {
+      background-color: #ec971f;
+    }
+    .linha-bottom{
+      height: 2px;
+      background-color: none;
+      margin: 10px 0;
+      width: 100%;
+    }
+
+    .subtitle-container {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 6px 0;
+      margin-left: -15px;
+      gap: 10px;
+    }
+    .subtitle-container h3 {
+      margin: 0;
+      flex-grow: 1;
+    }
+
+        /* ESTADOS DE ARRASTAMENTO */
+    .board.drag-source {
+    opacity: 0.6;
+    transform: scale(0.98);
+    }
+
+    /* ÁREA DE DROP VÁLIDA (MESMO BOARD) */
+    .board.drop-same-board {
+    box-shadow: 0 0 0 3px #4CAF50; /* Verde para reordenação */
+    }
+
+    /* ÁREA DE DROP VÁLIDA (OUTRO BOARD) */
+    .board.drop-other-board {
+    box-shadow: 0 0 0 3px #2196F3; /* Azul para movimentação */
+    }
+
+    /* ITEM SENDO ARRASTADO */
+    li.dragging {
+    background-color: rgba(255, 255, 255, 0.8);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    }
+
+    /* ÁREA DE DROP INVÁLIDA */
+    .board.drop-forbidden {
+    box-shadow: 0 0 0 3px #f44336; /* Vermelho para ação bloqueada */
+    }
+
+    /* EFEITO PARA ITENS DURANTE ARRASTE */
+    .board ul.drop-possible {
+    background-color: rgba(76, 175, 80, 0.1); /* Verde claro */
+    min-height: 50px;
+    border-radius: 8px;
+    }
+
+    .board ul.drop-other {
+    background-color: rgba(33, 150, 243, 0.1); /* Azul claro */
+    }
+
+    /* ESTILO PARA LINHAS ENTRE ITENS (REORDENAÇÃO) */
+    li.drop-between {
+    border-top: 2px dashed #4CAF50;
+    margin-top: 2px;
+    }
+
+  </style>
+</head>
+<body>
+  <!--BOTOES ACIMA DOS QUADROS-->
+  <div class="container-topo">
+    <div class="controls">
+      <button class="add-board" onclick="addBoard()">Adicionar Tabela</button>
+      <button class="add-board" onclick="exportData()">Exportar Dados</button>
+      <label class="import-label add-board">
+        Importar Dados
+        <input type="file" accept="application/json" onchange="importData(event)" hidden />
+      </label>
+      <!--<button class="add-board" onclick="resetBoards()">Resetar Tudo</button>-->
+    </div>
+  </div>
+
+  <div class="linha"></div>
+
+  <!--QUADROS/TABELAS-->
+  <div class="container-quadros">
+    <div class="board-container" id="boardContainer"></div>
+  </div>
+  <div class="linha-bottom"></div>
+    <script>
+      let boards = JSON.parse(localStorage.getItem("boardsData")) || Array.from({ length: 2 }, (_, i) => ({ id: Date.now() + i, title: `Tabela ${i + 1}`, links: [] }));
+
+      function saveBoards() {
+        localStorage.setItem("boardsData", JSON.stringify(boards));
+      }
+
+      function renderBoards() {
+        const container = document.getElementById("boardContainer");
+        container.innerHTML = "";
+
+        boards.forEach((board, index) => {
+          const div = document.createElement("div");
+          div.className = "board";
+          div.dataset.boardId = board.id;
+
+          div.ondragover = (e) => {
+            e.preventDefault();
+          };
+
+          div.ondrop = (e) => {
+            e.preventDefault();
+            const type = e.dataTransfer.getData("type");
+
+            if (type === "board") {
+              const draggedIndex = +e.dataTransfer.getData("text/plain");
+              const targetIndex = index;
+
+              if (draggedIndex === targetIndex) return;
+
+              const draggedBoard = boards.splice(draggedIndex, 1)[0];
+              boards.splice(targetIndex, 0, draggedBoard);
+
+              saveBoards();
+              renderBoards();
+            }
+          };
+
+          const title = document.createElement("h2");
+          title.contentEditable = true;
+          title.innerText = board.title;
+          title.draggable = true;
+          title.addEventListener("blur", () => {
+            board.title = title.innerText.trim();
+            saveBoards();
+          });
+          title.ondragstart = (e) => {
+            e.dataTransfer.setData("type", "board");
+            e.dataTransfer.setData("text/plain", index);
+          };
+
+          const list = document.createElement("ul");
+          list.ondragover = (e) => e.preventDefault();
+          list.ondrop = (e) => {
+            e.preventDefault();
+            const type = e.dataTransfer.getData("type");
+
+            if (type === "link") {
+                const data = JSON.parse(e.dataTransfer.getData("application/json"));
+                const originBoard = boards.find(b => b.id === data.boardId);
+                
+                // Verificação simplificada
+                if (!originBoard || originBoard.id === board.id) return;
+
+                // Movimentação entre boards (só na área vazia)
+                if (e.target === list) {
+                const [movedLink] = originBoard.links.splice(data.linkIndex, 1);
+                board.links.push(movedLink);
+                saveBoards();
+                renderBoards();
+                }
+            }
+          };
+
+          //ORGANIZADOR DE LINKS NO BOARD
+          board.links.forEach((link, index) => {
+            if (!link) return;
+
+            const li = document.createElement("li");
+            li.draggable = true;
+
+            li.ondragstart = (e) => {
+              e.dataTransfer.setData("type", "link")
+              e.dataTransfer.setData("application/json", JSON.stringify({ boardId: board.id, linkIndex: index }));
+            };
+
+            li.ondragover = (e) => e.preventDefault();
+
+            li.ondrop = (e) => {
+                e.preventDefault();
+                const type = e.dataTransfer.getData("type");
+
+                if (type === "link") {
+                    const data = JSON.parse(e.dataTransfer.getData("application/json"));
+                    
+                    // Só permite se for do MESMO board
+                    if (data.boardId === board.id) {
+                        const [movedLink] = board.links.splice(data.linkIndex, 1);
+                        const dropIndex = [...e.currentTarget.parentNode.children].indexOf(e.currentTarget);
+                        board.links.splice(dropIndex, 0, movedLink);
+                        saveBoards();
+                        renderBoards();
+                    }
+                }
+            };
+            
+            //LINK/PASTA VISUALIZACAO
+            const a = document.createElement("a");
+            if (link.isFolder) {
+              a.innerText = `📁 ${link.name}`;
+              a.href = "#";
+              a.style.cursor = "pointer";
+              a.title = `${link.note}\n${link.url}\nClique para copiar o caminho da pasta`
+
+              a.onclick = (e) => {
+                e.preventDefault();
+                navigator.clipboard.writeText(link.url)
+                  .then(() => alert("Caminho copiado para a área de transferência!"))
+                  .catch(() => alert("Erro ao copiar o caminho."));
+              };
+            } else {
+              a.title = `${link.note}\n${link.url}`
+              a.href = link.url;
+              a.innerText = `🔗 ${link.name}`;
+              a.target = "_blank";
+            }
+
+            //BOTAO APAGAR LINK/PASTA
+            const delBtn = document.createElement("button");
+            delBtn.className = "delete-link";
+            delBtn.innerText = "🗑️";
+            delBtn.onclick = () => {
+              board.links.splice(index, 1);
+              saveBoards();
+              renderBoards();
+            };
+
+            //BOTAO EDITAR
+            const editBtn = document.createElement("button");
+            editBtn.className = "edit-link"
+            editBtn.innerText = "✏️";
+            editBtn.title = "Editar link";
+            editBtn.onclick = () => {
+              const newName = prompt("Editar nome do link:", link.name);
+              if(newName === null) return;
+              const newUrl = prompt("Editar URL do link:", link.url);
+              if(newUrl === null) return;
+              const newNote = prompt("Editar nota/descrição:", link.note || "");
+              if(newNote === null) return;
+
+              board.links[index] = {name: newName.trim(), url: newUrl.trim(), note: newNote.trim(), isFolder: board.links[index].isFolder};
+              saveBoards();
+              renderBoards();
+            }
+
+            li.appendChild(a);
+            li.appendChild(editBtn);
+            li.appendChild(delBtn);
+            list.appendChild(li);
+        
+        });
+        
+          //BOTOES BOARD
+          const addBtn = document.createElement("button");
+          addBtn.innerText = "🔗 Adicionar Link";
+          addBtn.className = "add-link-btn";
+          addBtn.onclick = () => addLink(board.id);
+
+          const addFolderBtn = document.createElement("button");
+          addFolderBtn.innerText = "📁 Adicionar Pasta";
+          addFolderBtn.className = "add-link-btn";
+          addFolderBtn.onclick = () => {
+            const name = prompt("Nome da pasta:");
+            if (!name) return;
+
+            const url = prompt("Caminho da pasta:");
+            const note = prompt("Nota ou descrição da pasta:")
+            if (!url) return;
+
+            board.links.push({ name: name.trim(), url: url.trim(), isFolder: true, note: note.trim() });
+            saveBoards();
+            renderBoards();
+          };          
+
+
+          const openAllBtn = document.createElement("button");
+          openAllBtn.innerText = "🚀 Abrir Tudo";
+          openAllBtn.className = "open-all-btn";
+          openAllBtn.onclick = () => openAllLinks(board);
+
+          const deleteBoardBtn = document.createElement("button");
+          deleteBoardBtn.className = "delete-board";
+          deleteBoardBtn.innerText = "❌";
+          deleteBoardBtn.onclick = () => {
+            if (confirm("Tem certeza que deseja excluir esta tabela?")) {
+              boards = boards.filter(b => b.id !== board.id);
+              saveBoards();
+              renderBoards();
+            }
+          };
+
+          //BOTOES BOARD
+          const buttonGroup = document.createElement("div");
+          buttonGroup.className = "board-buttons";
+          buttonGroup.appendChild(addBtn);
+          buttonGroup.appendChild(addFolderBtn);
+          buttonGroup.appendChild(openAllBtn);
+          buttonGroup.appendChild(deleteBoardBtn);
+          
+          div.appendChild(title);
+          div.appendChild(list);
+          div.appendChild(buttonGroup);
+          container.appendChild(div);
+
+        });
+      }
+      
+      // FUNCTION ADICIONA BOARD
+      function addBoard() {
+        const newBoard = {
+          id: Date.now(),
+          title: `Tabela ${boards.length + 1}`,
+          links: []
+        };
+        boards.push(newBoard);
+        saveBoards();
+        renderBoards();
+      }
+
+      //FUNCTION ADICIONA LINK
+      function addLink(boardId) {
+        const name = prompt("Nome do link:");
+        const url = prompt("URL do link:");
+        const note = prompt("Nota ou descrição do link: ");
+        if (!name || !url) return;
+
+        const board = boards.find(b => b.id === boardId);
+        if (board) {
+          board.links.push({ name, url, note});
+          saveBoards();
+          renderBoards();
+        }
+      }
+      
+      function openAllLinks(board) {
+        board.links.forEach(link => {
+          if(!link.isFolder){
+            window.open(link.url, "_blank");
+          }
+        });
+      }
+
+      function exportData() {
+        const blob = new Blob([JSON.stringify(boards, null, 2)], { type: "application/json" });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = "quadros_links.json";
+        a.click();
+        URL.revokeObjectURL(url);
+      }
+
+      function importData(event) {
+        const file = event.target.files[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          try {
+            const imported = JSON.parse(e.target.result);
+            if (Array.isArray(imported)) {
+              boards = imported;
+              saveBoards();
+              renderBoards();
+            } else {
+              alert("Arquivo inválido");
+            }
+          } catch {
+            alert("Erro ao ler o arquivo.");
+          }
+        };
+        reader.readAsText(file);
+      }
+
+      function resetBoards() {
+        if (confirm("Deseja resetar tudo? Isso apagará os dados salvos.")) {
+          localStorage.removeItem("boardsData");
+          boards = Array.from({ length: 2 }, (_, i) => ({ id: Date.now() + i, title: `Tabela ${i + 1}`, links: [] }));
+          saveBoards();
+          location.reload();
+          }
+        }
+
+      renderBoards();
+
+      function setLayout(cols){
+        const container = document.querySelector('.board-container');
+        container.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+        localStorage.setItem("layoutColumns", cols);
+      }
+
+      window.addEventListener("DOMContentLoaded", () => {
+        const savedLayout = localStorage.getItem("layoutColumns") || "4";
+        setLayout(savedLayout);
+
+        const selectElement = document.getElementById("layoutSelect");
+        if (selectElement) {
+          selectElement.value = savedLayout;
+          }
+        });   
+  </script>
+</body>
+</html>
