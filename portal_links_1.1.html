@@ -4,101 +4,57 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />     
       <title>Portal de Links</title>
-      <div class="linha"></div>
-      <div class="container-topo">
         <div class="header">
-          <h1>Portal de Links</h1>
-          <select id="layoutSelect" onchange="setLayout(this.value)">
-            <option value="1"> Layout 1 </option>
-            <option value="2"> Layout 2 </option>
-            <option value="3"> Layout 3 </option>
-            <option value="4"> Layout 4 </option>
-          </select>
+          <h1>🪐 PORTAL DE LINKS</h1>
         </div>
-      </div>
-      <div class="linha"></div>
   <style>
+
     * {
       box-sizing: border-box;
     }
+
     body {
-      font-family: Arial, sans-serif;
+      font-family: 'Segoe UI', 'Poppins', sans-serif;
       margin: 20px;
-      background-color: #fdf6f6;
+      background: linear-gradient(to right, #026773, #70383E);
       padding-bottom: 20px;
     }
+
     html, body {
       height: 100%;
-      margin: 5px;
+      margin-bottom: 10px;
     }
+
     .header h1 {
-      font-size: 32px;
-      color: #012E40;
+      font-size: 45px;
+      letter-spacing: 1px;
+      margin: 0;
+      text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
     }
-    .container-topo {
-      background-color: #fddab875;
-      padding: 20px;
-      border-radius: 16px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    }
-    .container-quadros {
-      background-color: #fddab875;
-      padding: 20px;
-      border-radius: 8px;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-      min-height: calc(100vh - 280px);
-      box-sizing:border-box;
-    }
+
     .linha {
       height: 2px;
-      background-color: #2e2e2e;
+      background-color: none;
       margin: 10px 0;
       width: 100%;
     }
-    .header select {
-      appearance: none;
-      position: absolute;
-      right: 0;
-      top: 50%;
-      transform: translateY(-50%);
-      padding: 10px 20px;
-      font-size: 14px;
-      border-radius: 10px;
-      border: none;
-      background-color: #3CA6A6;
-      color: #ffffff;
-      cursor: pointer;
-    }
-    .select-tema {
-      display: flex;
-      justify-content: right;
-      flex-wrap: wrap;
-      width: 100%;
-      margin-bottom: 10px;
-    }
+
     .header {
-      position: relative;
-      text-align: center; 
+      color: white;
+      padding: 10px 20px;
+      text-align: center;;
       margin-bottom: 20px;
     }
+
     .controls {
       display: flex;
       justify-content: center;
       gap: 10px;
       flex-wrap: wrap;
+      margin-bottom: 20px;
+      appearance: none;
     }
-    .import-label {
-      padding: 10px 20px;
-      font-size: 14px;
-      cursor: pointer;
-      background-color: #3CA6A6;
-      color: white;
-      border: none;
-      border-radius: 10px;
-    }
-    .import-label:hover {
-      background-color: #026773;
-    }
+
     .board-container {
       margin: 10px 0px;
       display: grid;
@@ -107,41 +63,44 @@
       min-height: 100px;
       box-sizing: border-box;
     }
+
     .board {
       display: flex;
       flex-direction: column;
-      border: 1px solid #3CA6A6;
       border-radius: 10px;
       padding: 10px;
-      background-color: #fff7a3;
-      color: #3CA6A6;
-      height: 500px;
-    }
-    
-    .board h3 {
-      font-size: 14px;
-      background-color: #3CA6A6;
+      background-color: #c0c0b4;
       color: white;
-      margin-right: 5px;
-      border-radius: 4px;
-      padding: 4px;
-      margin-left: -10px;
+      height: 500px;
     }
 
     .board h2[contenteditable] {
+      text-align: center;
       outline: none;
       padding: 4px;
-      background-color: #3CA6A6;
+      background-color: #70383E;
       color: white;
       border-radius: 4px;
       margin-top: 4px;
+      margin-bottom: 5px;
+      appearance: none;
+      transition: transform 0.2s ease;
+      margin-left: 10px;
+      margin-right: 10px;
     }
+
+    .board h2:hover{ 
+      transform: scale(1.02);
+    }
+
     .board ul {
       flex-grow: 1;
       overflow-y: auto;
       padding-left: 20px;
       min-height: 80px;
+      margin-top: 5px;
     }
+
     .board li {
       display: flex;
       justify-content: space-between;
@@ -149,26 +108,39 @@
       margin-bottom: 5px;
       gap: 10px;
     }
+
     .board a {
       color: #026773;
       text-decoration: none;
       flex-grow: 1;
     }
+
     .board a:hover {
       text-decoration: underline;
     }
+
     .add-board {
-      padding: 10px 20px;
-      font-size: 14px;
+      min-width: 50px;
+      max-height: 50px;
+      text-align: center;
+      text-align-last: center;
+      padding: 10px 30px;
+      font-size: 22px;
       cursor: pointer;
-      background-color: #3CA6A6;
+      background-color:#70383E;
       color: white;
       border: none;
-      border-radius: 10px;
+      border-radius: 3px;
+      appearance: none;
+      transition: transform 0.2s ease, background-color 0.3s ease;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
     }
+
     .add-board:hover {
-      background-color: #026773;
+      background-color: #AC5465;
+      transform: scale(1.05);
     }
+
     .board-buttons {
       display: flex;
       justify-content: space-between;
@@ -177,134 +149,85 @@
       gap: 6px;
       margin-bottom: 5px;
     }
+
     .delete-link, .delete-board {
-      background-color: #bbbbbb;
+      background-color: #5F767E;
       color: white;
       padding: 6px 12px;
       cursor: pointer;
       font-size: 12px;
       border: none;
       border-radius: 10px;
-      
+      appearance: none;
+      transition: transform 0.2s ease, background-color 0.3s ease;
     }
+
     .delete-link {
       margin-right: 10px;
     }
+
     .delete-link:hover, .delete-board:hover {
-      background-color: #c9302c;
+      background-color: #C92C2C;
+      transform: scale(1.15);
     }
+
     .add-link-btn, .open-all-btn{
       font-size: 12px; 
       cursor: pointer;
-      background-color: #3CA6A6;
+      background-color: #70383E;
       color: white;
       border: none;
       border-radius: 10px;
       padding: 6px 12px;
+      appearance: none;
+      transition: transform 0.2s ease, background-color 0.3s ease;
     }
+
     .add-link-btn:hover, .open-all-btn:hover{
-      background-color: #026773;
+      background-color: #AC5465;
+      transform: scale(1.05);
     }
+
     .edit-link {
-      background-color: #bbbbbb;
+      background-color: #5F767E;
       color: white;
       padding: 6px 12px;
       cursor: pointer;
       font-size: 12px;
       border: none;
       border-radius: 10px;
+      appearance: none;
+      transition: transform 0.2s ease, background-color 0.3s ease;
     }
 
     .edit-link:hover {
       background-color: #ec971f;
-    }
-    .linha-bottom{
-      height: 2px;
-      background-color: none;
-      margin: 10px 0;
-      width: 100%;
-    }
-
-    .subtitle-container {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      margin: 6px 0;
-      margin-left: -15px;
-      gap: 10px;
-    }
-    .subtitle-container h3 {
-      margin: 0;
-      flex-grow: 1;
-    }
-
-        /* ESTADOS DE ARRASTAMENTO */
-    .board.drag-source {
-    opacity: 0.6;
-    transform: scale(0.98);
-    }
-
-    /* ÁREA DE DROP VÁLIDA (MESMO BOARD) */
-    .board.drop-same-board {
-    box-shadow: 0 0 0 3px #4CAF50; /* Verde para reordenação */
-    }
-
-    /* ÁREA DE DROP VÁLIDA (OUTRO BOARD) */
-    .board.drop-other-board {
-    box-shadow: 0 0 0 3px #2196F3; /* Azul para movimentação */
-    }
-
-    /* ITEM SENDO ARRASTADO */
-    li.dragging {
-    background-color: rgba(255, 255, 255, 0.8);
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
-    }
-
-    /* ÁREA DE DROP INVÁLIDA */
-    .board.drop-forbidden {
-    box-shadow: 0 0 0 3px #f44336; /* Vermelho para ação bloqueada */
-    }
-
-    /* EFEITO PARA ITENS DURANTE ARRASTE */
-    .board ul.drop-possible {
-    background-color: rgba(76, 175, 80, 0.1); /* Verde claro */
-    min-height: 50px;
-    border-radius: 8px;
-    }
-
-    .board ul.drop-other {
-    background-color: rgba(33, 150, 243, 0.1); /* Azul claro */
-    }
-
-    /* ESTILO PARA LINHAS ENTRE ITENS (REORDENAÇÃO) */
-    li.drop-between {
-    border-top: 2px dashed #4CAF50;
-    margin-top: 2px;
+      transform: scale(1.15);
     }
 
   </style>
 </head>
 <body>
   <!--BOTOES ACIMA DOS QUADROS-->
-  <div class="container-topo">
     <div class="controls">
-      <button class="add-board" onclick="addBoard()">Adicionar Tabela</button>
+      <button class="add-board" onclick="addBoard()">Adicionar tabela</button>
       <button class="add-board" onclick="exportData()">Exportar Dados</button>
-      <label class="import-label add-board">
-        Importar Dados
-        <input type="file" accept="application/json" onchange="importData(event)" hidden />
-      </label>
-      <!--<button class="add-board" onclick="resetBoards()">Resetar Tudo</button>-->
+      <input type="file" id="importInput" accept="application/json" onchange="importData(event)" hidden />
+      <button class="add-board" onclick="document.getElementById('importInput').click()">Importar Dados</button>
+      <button class="add-board" onclick="resetBoards()">Resetar Tudo</button>
+      <select id="layoutSelect" class="add-board" onchange="setLayout(this.value)">
+        <option value="1">Layout 1</option>
+        <option value="2">Layout 2</option>
+        <option value="3">Layout 3</option>
+        <option value="4">Layout 4</option>
+      </select>
     </div>
-  </div>
-
-  <div class="linha"></div>
 
   <!--QUADROS/TABELAS-->
   <div class="container-quadros">
     <div class="board-container" id="boardContainer"></div>
   </div>
-  <div class="linha-bottom"></div>
+  <div class="linha"></div>
     <script>
       let boards = JSON.parse(localStorage.getItem("boardsData")) || Array.from({ length: 2 }, (_, i) => ({ id: Date.now() + i, title: `Tabela ${i + 1}`, links: [] }));
 
